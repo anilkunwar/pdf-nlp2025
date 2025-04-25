@@ -20,7 +20,7 @@ DistilBERT for a sample text classification task.
 """)
 
 # File uploader
-uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
+uploaded_file = st.file_uploader("Upload a PDF file consisting of the study about laser and/or microstructure", type="pdf")
 
 def extract_text_from_pdf(file):
     """Extract text from a PDF file using PyPDF2."""
