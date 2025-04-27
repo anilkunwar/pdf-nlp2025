@@ -1,1 +1,1 @@
-# pdf-nlp2025
+# Natural Language Processing with Texts from PDF file
