@@ -21,14 +21,14 @@ logger = logging.getLogger(__name__)
 def download_nltk_data():
     """Download required NLTK data with error handling."""
     try:
-        # Check if punkt and stopwords are already downloaded
-        nltk.data.find('tokenizers/punkt')
+        # Check if punkt_tab and stopwords are already downloaded
+        nltk.data.find('tokenizers/punkt_tab')
         nltk.data.find('corpora/stopwords')
         logger.info("NLTK data already present.")
     except LookupError:
         try:
-            logger.info("Downloading NLTK punkt and stopwords...")
-            nltk.download('punkt', quiet=True)
+            logger.info("Downloading NLTK punkt_tab and stopwords...")
+            nltk.download('punkt_tab', quiet=True)
             nltk.download('stopwords', quiet=True)
             logger.info("NLTK data downloaded successfully.")
         except Exception as e:
@@ -47,7 +47,7 @@ st.set_page_config(page_title="PDF Text Extractor & Visualization", layout="wide
 # Title and description
 st.title("PDF Text Extractor and Visualization")
 st.markdown("""
-Upload a PDF file to extract text between specified phrases, generate a word cloud, and create a bibliometric network.
+Upload a PDF file to extract text between specified phrases, generate a word cloud, and create abibliometric network.
 The app extracts text using PyPDF2, creates a word cloud with WordCloud, and generates a keyword co-occurrence network using NetworkX.
 """)
 
@@ -112,7 +112,7 @@ def generate_word_cloud(text):
         return None, f"Error generating word cloud: {str(e)}"
 
 def generate_bibliometric_network(text):
-    """Generate a keyword co-occurrence network."""
+    """Generate a -like keyword co-occurrence network."""
     try:
         stop_words = set(stopwords.words('english'))
         stop_words.update(['laser', 'microstructure'])  # Add domain-specific stopwords
@@ -194,4 +194,4 @@ if uploaded_file:
 
 # Footer
 st.markdown("---")
-st.markdown("Learning the meaning of words.")
+st.markdown("Learning the meaning of the words")
