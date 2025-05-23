@@ -13,6 +13,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 import logging
 import seaborn as sns
+import numpy as np
+from networkx.algorithms.community import greedy_modularity_communities
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -47,7 +49,7 @@ st.set_page_config(page_title="PDF Text Extractor & Visualization", layout="wide
 # Title and description
 st.title("PDF Text Extractor and Visualization")
 st.markdown("""
-Upload a PDF file to extract text between specified phrases, select relevant keywords, and generate publication-quality word clouds and bibliometric networks.
+Upload a PDF file to extract text between specified phrases, select relevant keywords, and generate publication-quality word clouds and colorful bibliometric networks.
 The app extracts text using PyPDF2, creates a word cloud with WordCloud, and generates a keyword co-occurrence network using NetworkX.
 """)
 
@@ -120,7 +122,7 @@ def generate_word_cloud(text, selected_keywords):
             colormap='viridis'  # Professional colormap
         ).generate(' '.join(filtered_words))
         
-        plt.style.use('seaborn-v0_8')  # Updated to valid Matplotlib style
+        plt.style.use('seaborn-v0_8')
         fig, ax = plt.subplots(figsize=(12, 6), dpi=300)  # High resolution
         ax.imshow(wordcloud, interpolation='bilinear')
         ax.axis('off')
@@ -131,8 +133,8 @@ def generate_word_cloud(text, selected_keywords):
         logger.error(f"Error generating word cloud: {str(e)}")
         return None, f"Error generating word cloud: {str(e)}"
 
-def generate_bibliometric_network(text, selected_keywords):
-    """Generate a publication-quality keyword co-occurrence network."""
+def generate_bibliometric_network(text, selected_keywords, label_font_size):
+    """Generate a publication-quality colorful keyword co-occurrence network."""
     try:
         stop_words = set(stopwords.words('english'))
         stop_words.update(['laser', 'microstructure'])
@@ -160,15 +162,27 @@ def generate_bibliometric_network(text, selected_keywords):
             if word1 in top_words and word2 in top_words:
                 G.add_edge(word1, word2, weight=weight)
         
-        plt.style.use('seaborn-v0_8')  # Updated to valid Matplotlib style
+        # Color nodes by community
+        communities = greedy_modularity_communities(G)
+        node_colors = {}
+        palette = sns.color_palette("husl", len(communities))
+        for i, community in enumerate(communities):
+            for node in community:
+                node_colors[node] = palette[i]
+        
+        # Color edges by weight
+        edge_weights = [G.edges[edge]['weight'] for edge in G.edges]
+        max_weight = max(edge_weights, default=1)
+        edge_colors = [plt.cm.Blues(weight / max_weight) for weight in edge_weights]
+        
+        plt.style.use('seaborn-v0_8')
         fig, ax = plt.subplots(figsize=(12, 8), dpi=300)  # High resolution
         pos = nx.spring_layout(G, k=0.5, seed=42)  # Consistent layout
         node_sizes = [G.nodes[node]['size'] * 20 for node in G.nodes]
-        edge_weights = [G.edges[edge]['weight'] * 0.5 for edge in G.edges]
         
-        nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color='skyblue', alpha=0.9, ax=ax)
-        nx.draw_networkx_edges(G, pos, width=edge_weights, alpha=0.5, ax=ax)
-        nx.draw_networkx_labels(G, pos, font_size=10, font_weight='bold', ax=ax)
+        nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color=[node_colors[node] for node in G.nodes], alpha=0.9, ax=ax)
+        nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=[w * 0.5 for w in edge_weights], alpha=0.5, ax=ax)
+        nx.draw_networkx_labels(G, pos, font_size=label_font_size, font_weight='bold', ax=ax)
         ax.set_title("Keyword Co-occurrence Network", fontsize=14, pad=10)
         plt.tight_layout()
         return fig, None
@@ -219,6 +233,10 @@ if uploaded_file:
                         st.error("Please select at least one keyword.")
                         st.stop()
                 
+                # Font size selection for network labels
+                st.subheader("Network Visualization Settings")
+                label_font_size = st.slider("Select font size for network labels", min_value=8, max_value=20, value=10, step=1)
+                
                 # Generate word cloud
                 st.subheader("Word Cloud")
                 wordcloud_fig, wordcloud_error = generate_word_cloud(selected_text, selected_keywords)
@@ -242,7 +260,7 @@ if uploaded_file:
                 
                 # Generate bibliometric network
                 st.subheader("Bibliometric Network")
-                network_fig, network_error = generate_bibliometric_network(selected_text, selected_keywords)
+                network_fig, network_error = generate_bibliometric_network(selected_text, selected_keywords, label_font_size)
                 if network_error:
                     st.error(network_error)
                 elif network_fig:
