@@ -1,0 +1,6 @@
+streamlit==1.39.0
+PyPDF2==3.0.1
+wordcloud==1.9.3
+networkx==3.3
+nltk==3.9.1
+matplotlib==3.9.2
