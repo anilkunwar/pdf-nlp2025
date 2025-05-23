@@ -120,7 +120,7 @@ def generate_word_cloud(text, selected_keywords):
             colormap='viridis'  # Professional colormap
         ).generate(' '.join(filtered_words))
         
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')  # Updated to valid Matplotlib style
         fig, ax = plt.subplots(figsize=(12, 6), dpi=300)  # High resolution
         ax.imshow(wordcloud, interpolation='bilinear')
         ax.axis('off')
@@ -132,7 +132,7 @@ def generate_word_cloud(text, selected_keywords):
         return None, f"Error generating word cloud: {str(e)}"
 
 def generate_bibliometric_network(text, selected_keywords):
-    """Generate a publication-quality VOSviewer-like keyword co-occurrence network."""
+    """Generate a publication-quality keyword co-occurrence network."""
     try:
         stop_words = set(stopwords.words('english'))
         stop_words.update(['laser', 'microstructure'])
@@ -160,7 +160,7 @@ def generate_bibliometric_network(text, selected_keywords):
             if word1 in top_words and word2 in top_words:
                 G.add_edge(word1, word2, weight=weight)
         
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')  # Updated to valid Matplotlib style
         fig, ax = plt.subplots(figsize=(12, 8), dpi=300)  # High resolution
         pos = nx.spring_layout(G, k=0.5, seed=42)  # Consistent layout
         node_sizes = [G.nodes[node]['size'] * 20 for node in G.nodes]
@@ -263,4 +263,4 @@ if uploaded_file:
 
 # Footer
 st.markdown("---")
-st.markdown("Built with Streamlit, PyPDF2, WordCloud, NetworkX, NLTK, Matplotlib, and Seaborn.")
+st.markdown("Intuitively learning the meaning of words.")
