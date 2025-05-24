@@ -10,6 +10,6 @@ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0
 typing_extensions==4.12.2
 pydantic==2.11.5   # ✅ Compatible with spaCy 3.8.x
 confection==0.1.5
-typing_inspection==0.9.0
+typing_inspection==0.4.0
 click==8.1.7
 typer==0.12.5
