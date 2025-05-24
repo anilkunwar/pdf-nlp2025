@@ -6,4 +6,4 @@
 
 # Word Cloud and Network Graphs from Texts Extracted from PDF
 
-[![meaningtowords](https://img.shields.io/badge/basicmodel-streamlit-red)](https://machinelearningseebeckcoefficientm1.streamlit.app/)
+[![meaningtowords](https://img.shields.io/badge/basicmodel-streamlit-red)](https://https://graphofscientificwords.streamlit.app/)
