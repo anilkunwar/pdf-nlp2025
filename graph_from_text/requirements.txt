@@ -5,7 +5,7 @@ networkx==3.3
 nltk==3.9.1
 matplotlib==3.9.2
 seaborn==0.13.2
-spacy
+spacy==3.7.6
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 typing_extensions==4.12.2
 pydantic==2.9.2
