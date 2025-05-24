@@ -5,3 +5,4 @@ networkx==3.3
 nltk==3.9.1
 matplotlib==3.9.2
 seaborn==0.13.2
+spacy
