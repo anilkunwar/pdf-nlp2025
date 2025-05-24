@@ -8,7 +8,7 @@ seaborn==0.13.2
 spacy==3.7.6
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 typing_extensions==4.12.2
-pydantic==1.10.14
+pydantic==1.10.14   # ✅ Compatible with spaCy 3.7.x
 confection==0.1.5
 typing_inspection==0.9.0
 click==8.1.7
